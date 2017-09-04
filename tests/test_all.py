@@ -37,6 +37,11 @@ try:
 except:
     assertion = None
 
+# create bytestring from string, will be str or bytes depending on python version
+import struct
+def mkbytes(s):
+    return struct.pack("B"*len(s),*[ord(_) for _ in s])
+
 class print_colored(object): # Namespace
     end = '\033[0m'
     def bold(self, txt):
@@ -74,6 +79,10 @@ if __name__ == "__main__":
     if not run_tests(test_MD5):
         exit_value = 1
     for name in (
+            'tree',
+            'binrepr',
+            'cell',
+            'inet',
             'visual_studio_mangling',
             'pe_manipulation',
             'elf_manipulation',

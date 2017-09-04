@@ -1,0 +1,13 @@
+Linear Rules
+Needed e.g. for IP, for payload length.
+This will allow to detect padding at the end of IP(str(IP(len=20))+'\0')
+
+Layer bindings
+Implementing it as rules should be feasible
+
+Extend ELF implementation
+
+Extend ME implementation
+
+Begin PE implementation
+This will probably need ad hoc hooks and hopefully not huge code changes.
