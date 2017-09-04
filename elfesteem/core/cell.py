@@ -633,7 +633,7 @@ class Node(Cell):
             self._subcells[k] = t(_parent=self,_name=k)
             getattr(self._subcells[k], wrapped_function)(value.pop(k, None))
         if len(value):
-            raise KeyError("Keys %r not in %s"%(value.keys(), self.__class__.__name__))
+            raise KeyError("Keys %r not in %s"%(list(value.keys()), self.__class__.__name__))
         return self
     def unpack(self, value, offset=0, **kargs):
         self._pos = {}
