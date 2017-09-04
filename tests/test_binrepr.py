@@ -32,9 +32,10 @@ def test_binary_representation(assertion):
         'One non-overlapped byte')
     assertion(mkbytes('etw'), r[2:5],
         'Three bytes across two chunks')
-    ubyte_msg = "ubyte format requires 0 <= number <= 255"
     if sys.version_info[:2] == (2, 3):
         ubyte_msg = "ubyte format requires 0<=number<=255"
+    else:
+        ubyte_msg = "ubyte format requires 0 <= number <= 255"
     try:
         import __pypy__
         ubyte_msg = "argument out of range for 1-byte integer format"
@@ -45,7 +46,7 @@ def test_binary_representation(assertion):
         assertion(0,1, "Should fail, invalid padding in chunk")
     except struct.error:
         e = sys.exc_info()[1]
-        assertion(ubyte_msg, str(e), 'Invalid padding')
+        assertion(ubyte_msg, str(e), 'Invalid padding: %s'%str(e))
     assertion(mkbytes('wo\0'), r.get_slice(4, 7, paddingbyte=0),
         'Segment with final padding')
     assertion(mkbytes('\0\0on'), r.get_slice(-2, 2, paddingbyte=0),

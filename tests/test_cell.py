@@ -311,14 +311,14 @@ def test_node_invalid_definitions(assertion):
         msg = "need more than 1 value to unpack"
         if sys.version_info[0:2] == (2, 3):
             msg = "unpack tuple of wrong size"
-        if sys.version_info[0:2] == (3, 5):
-            msg = "not enough values to unpack (expected 2, got 1)"
         try:
             import __pypy__
             msg = "expected length 2, got 1"
         except ImportError:
             pass
-        assertion(msg, str(e), tst)
+        if sys.version_info[0:2] in [(3, 5), (3, 6)]:
+            msg = "not enough values to unpack (expected 2, got 1)"
+        assertion(msg, str(e), "%s:%s"%(tst,e))
     tst = "MissingPos2 invalid definition"
     msg = "Field 'c' should be defined with a tuple"
     try:
@@ -331,8 +331,8 @@ def test_node_invalid_definitions(assertion):
         assertion(0,1, "%s should have raised a CellError"%tst)
     except CellError:
         e = sys.exc_info()[1]
-        assertion(msg, str(e), tst)
-    tst = "MissingPos2 invalid definition"
+        assertion(msg, str(e), "%s:%s"%(tst,e))
+    tst = "NotTuples invalid definition"
     try:
         class NotTuples(Node):
             _layout = [ 'a', 'b' ]
@@ -340,9 +340,9 @@ def test_node_invalid_definitions(assertion):
     except ValueError:
         e = sys.exc_info()[1]
         msg = "need more than 1 value to unpack"
-        if sys.version_info[0:2] == (3, 5):
+        if sys.version_info[0:2] in [(3, 5), (3, 6)]:
             msg = "not enough values to unpack (expected 2, got 1)"
-        assertion(msg, str(e), tst)
+        assertion(msg, str(e), "%s:%s"%(tst,e))
     class EmptyLayout(Node):
         _layout = [ ]
     try:
@@ -557,14 +557,18 @@ def test_string(assertion):
         assertion(0,1, "%s should have raised a TypeError"%tst)
     except TypeError:
         e = sys.exc_info()[1]
-        if sys.version_info[0] == 2: msg = 'an integer is required'
-        else: msg = 'an integer is required (got type NoneType)'
+        if sys.version_info[0] == 2:
+            msg = 'an integer is required'
+        elif sys.version_info[0:2] == (3, 2):
+            msg = 'an integer is required'
+        else:
+            msg = 'an integer is required (got type NoneType)'
         try:
             import __pypy__
             msg = "expected integer, got NoneType object"
         except ImportError:
             pass
-        assertion(msg, str(e), tst)
+        assertion(msg, str(e), "%s:%s"%(tst,e))
     TYPE = Str[4].default('TEST')
     cell = TYPE()
     assertion(mkbytes('TEST'), cell.pack(), "%s default"%TYPE.__name__)
