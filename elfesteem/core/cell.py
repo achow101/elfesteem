@@ -348,7 +348,10 @@ class Numeric(Leaf):
         return val
     repr2work = classmethod(repr2work)
     def work2repr(self, val):
-        if val in getattr(self, '_enum', {}).values():
+        enum = getattr(self, '_enum', {})
+        if hasattr(enum, 'name'):
+            val = enum.name[val]
+        elif val in enum.values():
             val = [ k for k, v in self._enum.items() if v == val ][0]
         return val
     packlen = lambda self: struct.calcsize(self._fmt)

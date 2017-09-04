@@ -42,6 +42,7 @@ PROTO_NAMES = NamedConstants((
     (17, 'udp'),
     ))
 load_proto(PROTO_NAMES, '/etc/protocols')
+PROTO_NAMES.extend( 0, 'ip') # We prefer 'ip' to 'hopopt', we put it last
 
 class HexShort(Short):
     def work2repr(self, val):
