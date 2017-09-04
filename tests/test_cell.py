@@ -313,6 +313,11 @@ def test_node_invalid_definitions(assertion):
             msg = "unpack tuple of wrong size"
         if sys.version_info[0:2] == (3, 5):
             msg = "not enough values to unpack (expected 2, got 1)"
+        try:
+            import __pypy__
+            msg = "expected length 2, got 1"
+        except ImportError:
+            pass
         assertion(msg, str(e), tst)
     tst = "MissingPos2 invalid definition"
     msg = "Field 'c' should be defined with a tuple"
@@ -554,6 +559,11 @@ def test_string(assertion):
         e = sys.exc_info()[1]
         if sys.version_info[0] == 2: msg = 'an integer is required'
         else: msg = 'an integer is required (got type NoneType)'
+        try:
+            import __pypy__
+            msg = "expected integer, got NoneType object"
+        except ImportError:
+            pass
         assertion(msg, str(e), tst)
     TYPE = Str[4].default('TEST')
     cell = TYPE()

@@ -36,6 +36,11 @@ def test_binary_representation(assertion):
     if sys.version_info[:2] == (2, 3):
         ubyte_msg = "ubyte format requires 0<=number<=255"
     try:
+        import __pypy__
+        ubyte_msg = "argument out of range for 1-byte integer format"
+    except ImportError:
+        pass
+    try:
         r[4:7]
         assertion(0,1, "Should fail, invalid padding in chunk")
     except struct.error:
